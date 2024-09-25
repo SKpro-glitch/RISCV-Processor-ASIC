@@ -27,7 +27,7 @@ module Synchronous_Core(input clk, Reset);
 
     //Fetch Unit declarations
     wire [1:0] Branch;
-    reg [9:0] TargetAddress;
+    wire [9:0] TargetAddress;
     wire [31:0] Instruction;
     wire [9:0] Add;
     
@@ -71,9 +71,9 @@ module Synchronous_Core(input clk, Reset);
     end
     
     //Register File
-    reg [31:0] Reg_File [0:31];
-    assign op0 = Reg_File[rs0];
-    assign op1 = Reg_File[rs1];
+    reg [31:0] Reg_File [0:15];
+    assign op0 = rs0[4] ? Reg_File[rs0] : rs0[3:0];
+    assign op1 = rs1[4] ? Reg_File[rs1] : rs1[3:0];
     reg [4:0] write_address;
     wire [31:0] write_data;
 
@@ -110,7 +110,8 @@ module Synchronous_Core(input clk, Reset);
     .opcode(opcode), .alu_opcode(alu_opcode),
     .op0(op0), .op1(op1),
     .funct3(funct3), .funct7(funct7),
-    .imm(imm),
+    .imm(imm), .address(Add),
+    .targetAddress(TargetAddress),
     .result(result),
     .branch(Branch),
     .mem_address(mem_address), 
