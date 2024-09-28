@@ -2,4 +2,4 @@
 
 **Author:** Soham Kapur
 <br>
-**Description:** ASIC Implementation of a 5-Stage Pipelined 32-bit RISC-V Processor
+**Description:** ASIC Implementation of a 4-Stage Pipelined 32-bit RISC-V Processor
