@@ -20,8 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Synchronous_Core(input clk, Reset);
-    
+module Synchronous_Core(clk, Reset, out, file);
+    input clk, Reset;
+    output [31:0] out, file;
 //////////////////////////////////////////////////////////////////////////////////
 // DECLARATIONS
 
@@ -46,7 +47,8 @@ module Synchronous_Core(input clk, Reset);
     //Execute Unit declarations
     wire [31:0] op0, op1;
     wire [31:0] result;
-
+    
+    assign out = result;
 //////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONAL UNITS
 
@@ -72,11 +74,11 @@ module Synchronous_Core(input clk, Reset);
     
     //Register File
     reg [31:0] Reg_File [0:15];
-    assign op0 = rs0[4] ? Reg_File[rs0] : rs0[3:0];
-    assign op1 = rs1[4] ? Reg_File[rs1] : rs1[3:0];
-    reg [4:0] write_address;
+    assign op0 = rs0[4] ? Reg_File[rs0] : {28'b0, rs0[3:0]};
+    assign op1 = rs1[4] ? Reg_File[rs1] : {28'b0, rs1[3:0]};
     wire [31:0] write_data;
-
+    assign file = Reg_File[0]; 
+    
     RAM d_ram(
     .write_enable(s),
     .address(mem_address),
@@ -117,14 +119,14 @@ module Synchronous_Core(input clk, Reset);
     .mem_address(mem_address), 
     .store_data(store_data)
     );
-        
+    
 //////////////////////////////////////////////////////////////////////////////////
     //  MEMORY ACCESS AND WRITE BACK LOGIC
     
     always @ (posedge clk) begin
         //Writing to Register File / Store operation
-        if(s) Reg_File[rdt] = write_data;
-        else if(i) Reg_File[rdt] = result;        
+        if(s) Reg_File[rdt] <= write_data;
+        else if(i) Reg_File[rdt] <= result;        
     end
     
 endmodule
