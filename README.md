@@ -7,4 +7,4 @@
 <br>
 **Block Diagram:**
 <br>
-![RISC-V_Sync_BlockDiagram](https://github.com/user-attachments/assets/c3b3c558-d4b9-4446-8af6-0a3a94a6ec06)
+![Processor_Architecture](https://github.com/user-attachments/assets/8b3b51b1-678b-4712-9591-f52adbdfefb6)
