@@ -7,7 +7,6 @@
 <br>
 **Abstract:**
 <br>
-<div style='text-align: justify;'>
  RISC-V is an open instruction set architecture (ISA) developed at University of California, Berkeley.
 It is meant to support various extensions for customization. Building
  a processor from scratch is a tedious and time-taking task which makes it difficult for
@@ -20,7 +19,6 @@ It is meant to support various extensions for customization. Building
  to suit the needs of the user. It is also useful as a learning material to visualize and
  understand the broad steps that make a processor function. It is intended to be open
 source so as to reach a wider audience.
-</div>
 <br>
 <br>
 **Block Diagram:**
