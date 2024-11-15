@@ -22,4 +22,5 @@ source so as to reach a wider audience.
 <br>
 <br>
 **Block Diagram:**
+<br>
 ![Processor_Architecture](https://github.com/user-attachments/assets/8b3b51b1-678b-4712-9591-f52adbdfefb6)
