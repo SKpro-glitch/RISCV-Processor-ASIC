@@ -1,22 +1,21 @@
-module Branch(clk, 
-    b, j, funct3, imm,
-    op0, op1, 
-    address, branch, targetAddress);
+module Branch(
+    input clk, b, j,
+    input [2:0] funct3,
+    input [19:0] imm,
+    input [31:0] op0, op1,
+    input [9:0] address,
     
-    input clk, b, j;
-    input [2:0] funct3;
-    input [19:0] imm;
-    input [31:0] op0, op1;
-    input [9:0] address;
-    output reg branch;
-    output reg [9:0] targetAddress;
+    output reg branch,
+    output reg [9:0] targetAddress
+    );
     
     wire [9:0] target;
     reg signed [31:0] s_op0, s_op1;
     
     always @ (posedge clk) begin
-        targetAddress <= address + imm;
-        s_op0 <= op0; s_op1 <= op1;
+        targetAddress = address + imm;
+        s_op0 = op0; 
+        s_op1 = op1;
         
         //Branch Logic
         if(j) branch = 1;
