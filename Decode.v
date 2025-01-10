@@ -19,25 +19,19 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module Decode(clk,
-    instruction, 
-    type,
-    opcode, alu_opcode,
-    rs0, rs1, rdt,
-    funct3, funct7,
-    imm
-    );
+//Decode Stage - Decodes the instructino to obtain its functional components
+module Decode(
+    input clk,
+    input [31:0] instruction,
     
-    input clk;
-    input [31:0] instruction;
-    output reg [0:5] type;
-    output reg [3:0] alu_opcode;
-    output reg [6:0] opcode;
-    output reg [4:0] rs0, rs1, rdt;
-    output reg [2:0] funct3;
-    output reg [6:0] funct7;
-    output reg [19:0] imm;
+    output reg [0:5] type,
+    output reg [3:0] alu_opcode,
+    output reg [6:0] opcode,
+    output reg [4:0] rs0, rs1, rdt,
+    output reg [2:0] funct3,
+    output reg [6:0] funct7,
+    output reg [19:0] imm
+    );
         
     wire r, i, s, b, u, j; 
     assign {r, i, s, b, u, j} = type; 
