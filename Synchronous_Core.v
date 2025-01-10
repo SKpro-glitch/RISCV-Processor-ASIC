@@ -27,19 +27,19 @@ module Synchronous_Core(clk, Reset, out, file);
 // DECLARATIONS
 
     //Fetch Unit declarations
-    wire [1:0] Branch;
-    wire [9:0] TargetAddress;
-    wire [31:0] Instruction;
-    wire [9:0] Add;
+    wire Branch; //Branch status
+    wire [9:0] TargetAddress; //Target instruction address to jump to 
+    wire [31:0] Instruction; //Fetched instruction
+    wire [9:0] Add; //Current address of fetched instruction
     
     //Decode Unit declarations
-    wire [5:0] type;
-    wire [3:0] opcode; 
-    wire [6:0] alu_opcode;
-    wire [4:0] rs0, rs1, rdt;
-    wire [2:0] funct3;
-    wire [6:0] funct7;
-    wire [11:0] imm;
+    wire [5:0] type; //Instruction type - R, I, S, B, U, J
+    wire [3:0] opcode; //Opcode to select type of instruction
+    wire [6:0] alu_opcode; //Opcode select operation of ALU
+    wire [4:0] rs0, rs1, rdt; //First source operand, Second source operand, Destination address of result
+    wire [2:0] funct3; //3-bit function
+    wire [6:0] funct7; //7-bit function
+    wire [19:0] imm; //Immediate value
     
     wire r, i, s, b, u, j; 
     assign {r, i, s, b, u, j} = type; 
@@ -57,14 +57,16 @@ module Synchronous_Core(clk, Reset, out, file);
     wire [31:0] data_in;
     wire [31:0] data_out;
     reg [9:0] Ram_add;
-        
+
+    //Instruction Memory
     RAM i_ram(
     .write_enable(write_enable),
     .address(Ram_add),
     .data_in(data_in),
     .data_out(data_out)
     );
-    
+
+    //If branch is present, fetch target address, else fetch next address
     always @ * begin
         if(|Branch) 
             Ram_add = TargetAddress;
@@ -73,12 +75,13 @@ module Synchronous_Core(clk, Reset, out, file);
     end
     
     //Register File
-    reg [31:0] Reg_File [0:15];
-    assign op0 = rs0[4] ? Reg_File[rs0] : {28'b0, rs0[3:0]};
-    assign op1 = rs1[4] ? Reg_File[rs1] : {28'b0, rs1[3:0]};
-    wire [31:0] write_data;
-    assign file = Reg_File[0]; 
-    
+    reg [31:0] Reg_File [0:15]; //16 registers of 32-bits each
+    assign op0 = rs0[4] ? Reg_File[rs0] : {28'b0, rs0[3:0]}; //Get first operand from Register File
+    assign op1 = rs1[4] ? Reg_File[rs1] : {28'b0, rs1[3:0]}; //Get second operand from Register File
+    wire [31:0] write_data; //Data to be written to the Reg File
+    assign file = Reg_File[0]; //The address zero of Reg File is given as output
+
+    //Data Memory
     RAM d_ram(
     .write_enable(s),
     .address(mem_address),
