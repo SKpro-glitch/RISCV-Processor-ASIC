@@ -20,15 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module RAM(
-    write_enable,
-    address,
-    data_in,
-    data_out
-);
-    input write_enable;
-    input [9:0] address;
-    input [31:0] data_in;
-    output reg [31:0] data_out;
+    input write_enable,
+    input [9:0] address,
+    input [31:0] data_in,
+    
+    output reg [31:0] data_out
+    );
     
     reg [31:0] memory [0:1023];
 
