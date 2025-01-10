@@ -19,8 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module Processor(Reset);
+//Additional top module to encapsulate the processor
 
     input Reset=0;    
     reg clk=0;
