@@ -1,31 +1,20 @@
 module Execute(
-    clk,
-    type,
-    opcode, alu_opcode,
-    op0, op1,
-    funct3, funct7,
-    imm, address,
-    result,
-    branch,
-    mem_address, 
-    store_data,
-    targetAddress
-    );
+    input clk,
+    input [0:5] type,
+    input [3:0] alu_opcode,
+    input [6:0] opcode,
+    input [31:0] op0, op1,
+    input [2:0] funct3,
+    input [6:0] funct7,
+    input [19:0] imm,
+    input [9:0] address,
     
-    input clk;
-    input [0:5] type;
-    input [3:0] alu_opcode;
-    input [6:0] opcode;
-    input [31:0] op0, op1;
-    input [2:0] funct3;
-    input [6:0] funct7;
-    input [19:0] imm;
-    input [9:0] address;
-    output [31:0] result;
-    output branch;
-    output [31:0] mem_address;
-    output [31:0] store_data;
-    output [9:0] targetAddress;
+    output [31:0] result,
+    output branch,
+    output [31:0] mem_address,
+    output [31:0] store_data,
+    output [9:0] targetAddress
+    );
     
     Branch bu(.clk(clk),
     .b(type[3]), .j(type[5]),
