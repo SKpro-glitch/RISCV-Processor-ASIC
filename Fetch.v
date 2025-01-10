@@ -1,14 +1,18 @@
-module Fetch(clk, Reset, Branch, TargetAddress, Instruction, Add, plus32);
-    wire [9:0] Address, Previous;
-    wire [31:0] I;
-    reg [9:0] JumpTo;
-    input clk, Reset;
-    input Branch;
-    input [9:0] TargetAddress;
-    output [31:0] Instruction;
-    output [9:0] Add;
-    input [31:0] plus32;
-        
+module Fetch(
+    input clk, Reset,
+    input Branch, //Branch taken status
+    input [9:0] TargetAddress, //Target Address to jump to
+    
+    output [31:0] Instruction, //Fetched instruction
+    output [9:0] Add, //Address of fetched instruction
+    input [31:0] plus32 //Instruction of next cache
+    );
+
+    //Fetch Stage - Fetches instruction from the Instruction Memory
+    
+    wire [9:0] Address, Previous; //Current address, Previous instruction's address
+    wire [31:0] I; //Instruction
+    
     Prog_Count PC(
     .clk(clk),
     .Reset(Reset),
