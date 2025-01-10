@@ -1,33 +1,38 @@
-module Prog_Mem(clk,Reset,Address,Instruction,plus32);
-  input clk, Reset;
-  input [9:0]Address;
-  output reg [31:0]Instruction;
-  input [31:0] plus32;
+module Prog_Mem(
+  input clk, Reset,
+  input [9:0] Address,
+  input [31:0] plus32,
+  
+  output reg [31:0] Instruction
+  );
   
   reg [31:0] Cache [4:0] [7:0];
   // Cache[0] and Cache[1] are Switching Caches.
-  // Cache[2:4] are Subroutine Caches.
-  reg [9:0] lb [4:0], ub [4:0];
+  // Cache[2:4] are additional Caches to store Subroutines.
+  
+  reg [9:0] lb [4:0], ub [4:0]; //Lower Bound and Upper Bound of respective Caches.
   
   reg k=0;
   wire kbar;
-  integer i;
+  integer i; //Loop variable to initialise Caches
   
   initial begin
-    
 //    for(i=0; i<8; i=i+1) Cache[0][i] = RAM[i];
+
+
+    //Initialising test instructions in the Cache
     
     Cache[0][0] = 32'h00528003;
     Cache[0][1] = 32'h00228003;
     Cache[0][2] = 32'h00b18003;
-    Cache[0][3] = 32'h00000000;
+    Cache[0][3] = 32'h00000023;
     Cache[0][4] = 32'h00000000;
     Cache[0][5] = 32'h00000000;
     Cache[0][6] = 32'h00000000;
     Cache[0][7] = 32'h00000000;
     Cache[0][8] = 32'h00000000;
     
-    Cache[1][0] = 32'h00b18003;
+    Cache[1][0] = 32'h00228003;
     Cache[1][1] = 32'h00000000;
     Cache[1][2] = 32'h00000000;
     Cache[1][3] = 32'h00000000;
@@ -36,18 +41,21 @@ module Prog_Mem(clk,Reset,Address,Instruction,plus32);
     Cache[1][6] = 32'h00000000;
     Cache[1][7] = 32'h00000000;
     Cache[1][8] = 32'h00000000;
-//    lb[0] = 10'b0000000000; ub[0] = 10'b0000011111;
+
+    //Initialising memory address boundaries of the Caches
+    
     lb[0] = 10'b0000000000; ub[0] = 10'b0000000111;
-//    lb[1] = 10'b0000100000; ub[1] = 10'b0000111111;
     lb[1] = 10'b0000001000; ub[1] = 10'b0000001111;
     lb[2] = 10'b0100000000; ub[2] = 10'b0100011111;
   end
   
   assign kbar = ~k;
-    always @ (posedge clk) begin
+  
+  always @ (posedge clk) begin
         if(Reset) // Reset/Flush logic
             Instruction = {32{1'b0}};
-        else begin //Cache usage logic
+        else begin 
+        //Cache usage logic - If address is within bounds of a cache, fetch from respective cache instead of memory
                 if(Address>=lb[k] && Address<=ub[k]) begin
                     Instruction <= {Cache[k][Address-lb[k]]};
                     Cache[kbar][Address-lb[kbar]] <= plus32;
