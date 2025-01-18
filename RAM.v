@@ -29,11 +29,12 @@ module RAM(
     
     reg [31:0] memory [0:1023];
 
+    initial memory[0] = 32'h11111111;
+    
     always @(address) begin
-        if (write_enable) begin
-            memory[address] <= data_in;
-        end
-        data_out <= memory[address];
+        #1;
+        if (write_enable) memory[address] <= data_in;
+        else data_out <= memory[address];
     end
 
 endmodule
