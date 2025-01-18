@@ -19,14 +19,12 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module Processor(Reset);
-//Additional top module to encapsulate the processor
 
-    input Reset=0;    
-    reg clk=0;
-    
-    always #10 clk = ~clk;
-    
-    Synchronous_Core sync(.clk(clk), .Reset(Reset));
+module Processor(clk, Reset, out, file);
+
+    input clk, Reset;    
+    output [31:0] out, file;
         
+    Synchronous_Core sync(.clk(clk), .Reset(Reset), .out(out), .file(file));
+    
 endmodule
