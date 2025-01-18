@@ -1,5 +1,27 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 22.09.2024 16:29:49
+// Design Name: 
+// Module Name: Branch
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 module Branch(
-    input clk, b, j,
+    input en, b, j,
     input [2:0] funct3,
     input [19:0] imm,
     input [31:0] op0, op1,
@@ -12,10 +34,9 @@ module Branch(
     wire [9:0] target;
     reg signed [31:0] s_op0, s_op1;
     
-    always @ (posedge clk) begin
-        targetAddress = address + imm;
-        s_op0 = op0; 
-        s_op1 = op1;
+    always @ (posedge en) begin
+        targetAddress <= address + imm;
+        s_op0 <= op0; s_op1 <= op1;
         
         //Branch Logic
         if(j) branch = 1;
