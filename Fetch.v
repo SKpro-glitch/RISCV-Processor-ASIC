@@ -1,31 +1,40 @@
 module Fetch(
     input clk, Reset,
-    input Branch, //Branch taken status
-    input [9:0] TargetAddress, //Target Address to jump to
+    input Branch,
+    input [9:0] TargetAddress,
+    input [31:0] plus32,
     
-    output [31:0] Instruction, //Fetched instruction
-    output [9:0] Add, //Address of fetched instruction
-    input [31:0] plus32 //Instruction of next cache
+    output [31:0] Instruction,
+    output [9:0] Add
     );
-
-    //Fetch Stage - Fetches instruction from the Instruction Memory
     
-    wire [9:0] Address, Previous; //Current address, Previous instruction's address
-    wire [31:0] I; //Instruction
+    wire [9:0] Address, Previous;
+    wire [31:0] I;
+    
+    reg branch;
+    reg [9:0] JumpTo;
+    reg [31:0] Plus32;
+        
+    always @ (posedge clk) begin 
+        {branch, JumpTo} <= {Branch, TargetAddress};
+        Plus32 <= plus32;
+    end
     
     Prog_Count PC(
     .clk(clk),
     .Reset(Reset),
     .Jump(Jump),
-    .JumpTo(TargetAddress),
-    .Address(Address));
+    .JumpTo(JumpTo),
+    .Address(Address)
+    );
             
     Prog_Mem IMEM(
     .clk(clk),
     .Reset(Reset),
     .Address(Address),
-    .Instruction(I),
-    .plus32(plus32));
+    .plus32(Plus32),
+    .Instruction(I)
+    );
     
     assign Add  = Address;
     assign Instruction = I;
