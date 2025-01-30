@@ -2,4 +2,4 @@
 
 **Author:** Soham Kapur
 <br>
-**Description:** ASIC Implementation of a 4-Stage Pipelined 32-bit RISC-V Processor
+**Description:** This is a basic RISC-V based processor under development. It follows the 32-bit Integer ISA.
