@@ -28,8 +28,6 @@ module RAM(
     );
     
     reg [31:0] memory [0:1023];
-
-    initial memory[0] = 32'h11111111;
     
     always @(address) begin
         #1;
