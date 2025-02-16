@@ -21,24 +21,21 @@
 
 module Loadstore(
    input en, s,
-   input [6:0] opcode,      // Opcode
    input [2:0] funct3,      // funct3
    input [11:0] imm,        // immediate
-   input [31:0] op0, op1,   // Operand-0 and Operand-1 from register file
+   input [31:0] op1, op2,   // Operand-0 and Operand-1 from register file
    
    output reg [31:0] mem_address, store_data //Address and data
    );
    
    always @ (posedge en) begin
-        if(s) begin
-            case(funct3[1:0])
-                0: store_data = op1[7:0];
-                1: store_data = op1[15:0];
-                default: store_data = op1 ;
-            endcase
-        end
+        case(funct3[1:0])
+            0: store_data = op2[7:0];
+            1: store_data = op2[15:0];
+            default: store_data = op2;
+        endcase
         
-        mem_address = op0 + {{(20){imm[11]}}, imm};
+        if(s) mem_address = op1 + {{(20){imm[11]}}, imm};
    end
    
 endmodule
