@@ -23,25 +23,24 @@
 module Branch(
     input en, b, j,
     input [2:0] funct3,
-    input [19:0] imm,
+    input signed [19:0] imm,
     input [31:0] op1, op2,
-    input [9:0] address,
+    input signed [9:0] address,
     
     output reg branch,
-    output reg [9:0] targetAddress
+    output reg signed [9:0] targetAddress
     );
     
     wire [9:0] target;
     reg signed [31:0] s_op1, s_op2;
+    reg sign;
     
     always @ (posedge en) begin
-        targetAddress <= address + imm;
-        s_op1 <= op1; s_op2 <= op2;
+        targetAddress = address + imm[9:0];
+        s_op1 = op1; s_op2 = op2;
         
         //Branch Logic
-        if(j) branch = 1;
-        else if(b) begin
-            branch = 1;
+        if(b) begin
             case(funct3)
                 3'b000: branch = (op1 == op2);
                 3'b001: branch = ~(op1 == op2);
@@ -52,7 +51,7 @@ module Branch(
                 default: branch = 0;
             endcase
         end
-        else branch = 0;
+        else if(j) branch = 1; 
     end
     
 endmodule
