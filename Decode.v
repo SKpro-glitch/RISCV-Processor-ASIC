@@ -23,8 +23,10 @@
 module Decode(
     input clk,
     input [31:0] instruction,
+    input [9:0] PC,
     
     output reg valid,
+    output reg [9:0] Instruction_Address,
     output reg [0:5] type,
     output reg [3:0] alu_opcode,
     output reg [6:0] opcode,
@@ -40,6 +42,7 @@ module Decode(
     
     always @ (posedge clk) begin
         Instr = instruction;
+        Instruction_Address = PC;
         //Extracting the opcode from the instruction
         opcode = Instr[6:0];
         
@@ -56,26 +59,26 @@ module Decode(
         #1;
         //Deciding type of instruction based on opcode
         case(opcode)
-            7'h33: begin
+            7'h33: begin //R
                 type = 6'b100000;
                 imm = funct7;
             end
-            7'h67, 7'h03, 7'h13: begin
+            7'h67, 7'h03, 7'h13: begin //I
                 type = 6'b010000;
                 imm = {funct7, rs2};
             end
-            7'h23: begin
+            7'h23: begin //S
                 type = 6'b001000;
             end
-            7'h63:begin
+            7'h63:begin //B
                 type = 6'b000100;
                 imm = {Instr[31], Instr[7], funct7[5:0], Instr[11:8]};
             end
-            7'h37, 7'h17: begin
+            7'h37, 7'h17: begin //U
                 type = 6'b000010;
                 imm = {funct7, rs2, rs1, funct3};
             end
-            7'h6f: begin
+            7'h6f: begin //J
                 type = 6'b000001;
                 imm = {Instr[31], Instr[19:12], Instr[20], Instr[30:21]};
             end
