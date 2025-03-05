@@ -89,7 +89,11 @@ module Execute(
             else store_data = {{10{1'b0}}, imm_pipo};
         end
     end
-        
+    
+    wire take_branch;
+    
+    assign branch = (clk & en_bu) ? take_branch : 1'b0;
+    
     Branch bu(
     .en(en_bu),
     .b(b), .j(j),
@@ -97,7 +101,7 @@ module Execute(
     .op1(op1_pipo), .op2(op2_pipo),
     .address(address_pipo),
     
-    .branch(branch),
+    .branch(take_branch),
     .targetAddress(targetAddress));
     
     ALU alu(
