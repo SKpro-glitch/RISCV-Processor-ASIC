@@ -19,23 +19,23 @@ module Prog_Mem(
     
 //    for(i=0; i<8; i=i+1) Cache[0][i] = RAM[i];
     
-    Cache[0][0] = 32'h00001037;
-    Cache[0][1] = 32'h00002037;
-    Cache[0][2] = 32'h00003037;
-    Cache[0][3] = 32'h00018003;
-    Cache[0][4] = 32'h00000000;
-    Cache[0][5] = 32'h00000000;
-    Cache[0][6] = 32'h00000000;
+    Cache[0][0] = 32'h00000000;
+    Cache[0][1] = 32'h00018003;
+    Cache[0][2] = 32'h00006237;
+    Cache[0][3] = 32'h00000000;
+    Cache[0][4] = 32'h00002037;
+    Cache[0][5] = 32'h00001037;
+    Cache[0][6] = 32'h00400033;
     Cache[0][7] = 32'h00000000;
     
-    Cache[1][0] = 32'h00005137;
-    Cache[1][1] = 32'h00006237;
-    Cache[1][2] = 32'h00000000;
+    Cache[1][0] = 32'h00000037;
+    Cache[1][1] = 32'h00000000;
+    Cache[1][2] = 32'hfe050863;
     Cache[1][3] = 32'h00000000;
-    Cache[1][4] = 32'h00410033;
+    Cache[1][4] = 32'h00000000;
     Cache[1][5] = 32'h00000000;
     Cache[1][6] = 32'h00000000;
-    Cache[1][7] = 32'h00000000;
+    Cache[1][7] = 32'h00013037;
         
     lb[0] = 10'b0000000000; ub[0] = 10'b0000000111;
     lb[1] = 10'b0000001000; ub[1] = 10'b0000001111;
@@ -43,29 +43,35 @@ module Prog_Mem(
   end
   
   assign kbar = ~k;
-    always @ (posedge clk) begin
+    always @ (negedge clk) begin
         if(Reset) // Reset/Flush logic
                 Instruction <= {32{1'b0}};
         else begin //Cache usage logic
-                if(Address>=lb[k] && Address<=ub[k]) begin
-                    Instruction <= {Cache[k][Address-lb[k]]};
-                    Cache[kbar][Address-lb[kbar]] <= plus32;
+                if(Address>=lb[0] && Address<=ub[0]) begin
+                    Instruction <= Cache[0][Address-lb[0]];//[Address[2:0]];
+                    //Cache[kbar][Address[2:0]] <= plus32;
+                end
+                else if(Address>=lb[1] && Address<=ub[1]) begin
+                    Instruction <= Cache[1][Address-lb[1]];//[Address-lb[k]]};
+                    //Cache[kbar][Address[2:0]] <= plus32;
                 end
                 else if(Address>=lb[2] && Address<=ub[2])
-                    Instruction <= {Cache[2][Address-lb[2]]}; 
+                    Instruction <= Cache[2][Address-lb[2]]; 
                 else if(Address>=lb[3] && Address<=ub[3])
-                    Instruction <= {Cache[3][Address-lb[3]]}; 
+                    Instruction <= Cache[3][Address-lb[3]]; 
                 else if(Address>=lb[4] && Address<=ub[4])
-                    Instruction <= {Cache[4][Address-lb[4]]}; 
+                    Instruction <= Cache[4][Address-lb[4]]; 
                 else
                     Instruction = plus32;
                 
                 //Switching cache logic
+                /*
                 if(Address==ub[k]) begin
                     lb[k] <= ub[kbar] + 1;
                     ub[k] <= ub[kbar] + 8;
                     k <= kbar;
                 end
+                */
         end
     end
 
