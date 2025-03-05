@@ -23,7 +23,7 @@ module Fetch(
     Prog_Count PC(
     .clk(clk),
     .Reset(Reset),
-    .Jump(Jump),
+    .Jump(branch),
     .JumpTo(JumpTo),
     .Address(Address)
     );
