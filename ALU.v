@@ -41,8 +41,8 @@ module ALU(
               // Legal ALU instructions
               4'b0000  : result = op1 + op3 ; //Addition
               4'b0001  : result = op1 - op3 ; //Subtraction
-              4'b0100  : result = {{63{1'b0}}, (s_op1 < s_op3)} ; // Signed less than
-              4'b0110  : result = {{63{1'b0}}, (op1 < op3)} ; // Unsigned less than
+              4'b0100  : result = {{31{1'b0}}, (s_op1 < s_op3)} ; // Signed less than
+              4'b0110  : result = {{31{1'b0}}, (op1 < op3)} ; // Unsigned less than
               4'b1000  : result = op1 ^ op3 ; // Bitwise XOR
               4'b1100  : result = op1 | op3 ; // Bitwise OR
               4'b1110  : result = op1 & op3 ; // Bitwise AND
