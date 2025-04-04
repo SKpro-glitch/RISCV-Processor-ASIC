@@ -113,10 +113,6 @@ module Processor(
     
     assign file = Reg_File[0]; 
 
-    always @ (*) begin
-    end
-
-    
     always @ (negedge clk) begin
         //Instruction Address Control
         if(Branch)
